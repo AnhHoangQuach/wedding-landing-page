@@ -76,3 +76,13 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.button-gradient {
+  box-shadow: 4px 4px 16px 0px #ffc0d34d inset;
+  box-shadow: 12px 12px 16px 0px #ffc0d340 inset;
+  backdrop-filter: blur(12px);
+  padding: 14px 40px;
+  background: #ffc0d333;
+  color: white;
+  border: 2px solid #E4E4E6
+}

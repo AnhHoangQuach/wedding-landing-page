@@ -1,101 +1,97 @@
-import Image from "next/image";
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Fragment, useEffect, useState } from 'react'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [api, setApi] = useState<CarouselApi>()
+  const [canScrollPrev, setCanScrollPrev] = useState(false)
+  const [canScrollNext, setCanScrollNext] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const scrollPrev = () => {
+    if (api) api.scrollPrev()
+  }
+
+  const scrollNext = () => {
+    if (api) api.scrollNext()
+  }
+
+  // Update button disabled state when `api` changes or scroll position changes
+  useEffect(() => {
+    if (!api) return
+
+    // Initial button state
+    setCanScrollPrev(api.canScrollPrev())
+    setCanScrollNext(api.canScrollNext())
+
+    // Set up listener for scroll events
+    const onScrollChange = () => {
+      setCanScrollPrev(api.canScrollPrev())
+      setCanScrollNext(api.canScrollNext())
+    }
+
+    api.on('scroll', onScrollChange)
+
+    // Clean up event listener
+    return () => {
+      api.off('scroll', onScrollChange)
+    }
+  }, [api])
+
+  return (
+    <Fragment>
+      <section
+        className="relative min-h-[850px] bg-cover bg-center px-[200px]"
+        style={{
+          backgroundImage:
+            'linear-gradient(95.48deg, rgba(0, 0, 0, 0.4) 8.46%, rgba(0, 0, 0, 0.16) 51.77%, rgba(0, 0, 0, 0.12) 97.07%), url(/images/background.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="text-[#E4E4E6] absolute bottom-16">
+          <div className="font-medium capitalize">wedding Studio @ 2024</div>
+          <div className="font-bold text-[40px] my-6 uppercase">váy cưới sam nguyễn - biên hoà</div>
+          <Button className="button-gradient rounded-full capitalize">liên hệ</Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </section>
+      <section className="px-[200px] my-16">
+        <div className="flex items-center">
+          <div className="flex-1">
+            <div className="uppercase text-[#62646C] font-normal">service</div>
+            <div className="uppercase text-[28px] leading-9 font-bold">dịch vụ phóng sự cưới</div>
+          </div>
+          <div className="border border-[#202026] rounded-full flex items-center gap-3 p-[10px]">
+            <Button
+              className="rounded-full"
+              variant="outline"
+              size="icon"
+              onClick={scrollPrev}
+              disabled={!canScrollPrev}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              className="rounded-full"
+              variant="outline"
+              size="icon"
+              onClick={scrollNext}
+              disabled={!canScrollNext}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <Carousel setApi={setApi}>
+          <CarouselContent>
+            <CarouselItem>213</CarouselItem>
+            <CarouselItem>456</CarouselItem>
+            <CarouselItem>789</CarouselItem>
+          </CarouselContent>
+        </Carousel>
+      </section>
+    </Fragment>
+  )
 }
